@@ -23,6 +23,8 @@ const openai = new OpenAI({
 app.post("/chat", async (req, res) => {
   try {
     const messages = req.body.messages;
+    console.log("📨 New request received:");
+    console.log(messages);
 
     const response = await openai.chat.completions.create({
       model: "gpt-4", // or "gpt-3.5-turbo"
@@ -31,11 +33,16 @@ app.post("/chat", async (req, res) => {
 
     res.json(response.choices[0].message);
   } catch (err) {
-    console.error("❌ OpenAI Error:", err); // Full error object
-    res.status(500).json({ error: "OpenAI error occurred." });
+    console.error("❌ OpenAI Error:", err.response?.status || err.code || err.message);
+    console.error("🔎 Full Error:", JSON.stringify(err, null, 2));
+  
+    res.status(500).json({
+      error: {
+        message: err.response?.data?.error?.message || err.message || "Something went wrong.",
+      },
+    });
   }
-});
-
+  
 app.listen(port, () => {
   console.log(`🚀 AgentFlow backend running on port ${port}`);
 });
