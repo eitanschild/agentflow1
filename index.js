@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { OpenAI } = require("openai");
-require("dotenv").config(); // local only — Railway injects env vars automatically
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -9,7 +9,6 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// 🧪 Log API key status (for Railway debugging)
 if (!process.env.OPENAI_API_KEY) {
   console.error("❌ OPENAI_API_KEY is missing!");
 } else {
@@ -56,7 +55,6 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-// ✅ Final brace was missing
 app.listen(port, () => {
   console.log(`🚀 AgentFlow backend running on port ${port}`);
 });
