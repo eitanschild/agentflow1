@@ -68,6 +68,7 @@ app.get("/ping", (req, res) => {
   res.send("pong");
 });
 
-app.listen(port, "0.0.0.0", () => {
-  console.log(`🚀 AgentFlow backend running on port ${port}`);
+app.listen(process.env.PORT || 5000, "0.0.0.0", () => {
+  console.log(`🚀 AgentFlow backend running on port ${process.env.PORT || 5000}`);
 });
+
