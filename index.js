@@ -8,7 +8,7 @@ const port = process.env.PORT || 5000;
 
 // Allow all incoming requests or restrict to frontend
 app.use(cors({
-  origin: "https://agentflow-39tl1y44m-agentflows-projects.vercel.app",  // Make sure this matches your frontend URL
+  origin: "*",  // Make sure this matches your frontend URL
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type"]
 }));
