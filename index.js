@@ -6,14 +6,14 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-Access to fetch at 'https://agentflow1-production.up.railway.app/chat' from origin 'https://agentflow-39tl1y44m-agentflows-projects.vercel.app' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
-
-app.options("/chat", cors());
+// CORS config — this goes BEFORE anything else
 app.use(cors({
   origin: "https://agentflow-39tl1y44m-agentflows-projects.vercel.app",
   methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type"]
+  allowedHeaders: ["Content-Type"],
 }));
+app.options("/chat", cors());
+
 app.use(express.json());
 
 if (!process.env.OPENAI_API_KEY) {
@@ -50,7 +50,7 @@ app.post("/chat", async (req, res) => {
     });
 
     console.log("🧠 GPT response content:", response.choices[0].message.content);
-res.json(response.choices[0].message);
+    res.json(response.choices[0].message);
 
   } catch (err) {
     console.error("❌ OpenAI Error:", err.response?.status || err.code || err.message);
@@ -64,10 +64,10 @@ res.json(response.choices[0].message);
   }
 });
 
-app.listen(port, "0.0.0.0", () => {
-  console.log(`🚀 AgentFlow backend running on port ${port}`);
-});
-
 app.get("/ping", (req, res) => {
   res.send("pong");
+});
+
+app.listen(port, "0.0.0.0", () => {
+  console.log(`🚀 AgentFlow backend running on port ${port}`);
 });
