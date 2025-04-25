@@ -6,7 +6,14 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors());
+Access to fetch at 'https://agentflow1-production.up.railway.app/chat' from origin 'https://agentflow-39tl1y44m-agentflows-projects.vercel.app' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
+
+app.options("/chat", cors());
+app.use(cors({
+  origin: "https://agentflow-39tl1y44m-agentflows-projects.vercel.app",
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"]
+}));
 app.use(express.json());
 
 if (!process.env.OPENAI_API_KEY) {
