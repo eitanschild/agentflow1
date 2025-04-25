@@ -34,7 +34,10 @@ app.post("/chat", async (req, res) => {
       messages: [
         {
           role: "system",
-          content: `You are a real estate AI assistant. When given a short property description, return the following in JSON format:
+          content: `You are a real estate AI assistant. When given a short property description, 
+you must generate a full, rich listing. Expand on details, add emotional language, 
+highlight lifestyle benefits, and sound persuasive
+ return the following in JSON format:
 
 {
   "listing": "...",
