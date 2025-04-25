@@ -1,18 +1,17 @@
-const express = require("express");
 const cors = require("cors");
+const express = require("express");
 const { OpenAI } = require("openai");
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-// CORS config — this goes BEFORE anything else
+// Allow all incoming requests or restrict to frontend
 app.use(cors({
-  origin: "https://agentflow-39tl1y44m-agentflows-projects.vercel.app",
+  origin: "https://agentflow-39tl1y44m-agentflows-projects.vercel.app",  // Make sure this matches your frontend URL
   methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type"],
+  allowedHeaders: ["Content-Type"]
 }));
-app.options("/chat", cors());
 
 app.use(express.json());
 
@@ -29,8 +28,6 @@ const openai = new OpenAI({
 app.post("/chat", async (req, res) => {
   try {
     const messages = req.body.messages;
-    console.log("📨 New request received:");
-    console.log(messages);
 
     const response = await openai.chat.completions.create({
       model: "gpt-4",
@@ -49,9 +46,7 @@ app.post("/chat", async (req, res) => {
       ],
     });
 
-    console.log("🧠 GPT response content:", response.choices[0].message.content);
     res.json(response.choices[0].message);
-
   } catch (err) {
     console.error("❌ OpenAI Error:", err.response?.status || err.code || err.message);
     console.error("🔎 Full Error:", JSON.stringify(err, null, 2));
@@ -64,11 +59,12 @@ app.post("/chat", async (req, res) => {
   }
 });
 
+// Ping route for quick testing
 app.get("/ping", (req, res) => {
   res.send("pong");
 });
 
-app.listen(process.env.PORT || 5000, "0.0.0.0", () => {
-  console.log(`🚀 AgentFlow backend running on port ${process.env.PORT || 5000}`);
+// Server listening on port
+app.listen(port, "0.0.0.0", () => {
+  console.log(`🚀 AgentFlow backend running on port ${port}`);
 });
-
