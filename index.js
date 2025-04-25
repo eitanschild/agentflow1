@@ -58,3 +58,7 @@ app.post("/chat", async (req, res) => {
 app.listen(port, "0.0.0.0", () => {
   console.log(`🚀 AgentFlow backend running on port ${port}`);
 });
+
+app.get("/ping", (req, res) => {
+  res.send("pong");
+});
