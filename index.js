@@ -42,7 +42,9 @@ app.post("/chat", async (req, res) => {
       ],
     });
 
-    res.json(response.choices[0].message);
+    console.log("🧠 GPT response content:", response.choices[0].message.content);
+res.json(response.choices[0].message);
+
   } catch (err) {
     console.error("❌ OpenAI Error:", err.response?.status || err.code || err.message);
     console.error("🔎 Full Error:", JSON.stringify(err, null, 2));
