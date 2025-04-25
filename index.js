@@ -27,22 +27,36 @@ app.post("/chat", async (req, res) => {
     console.log(messages);
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4", // or "gpt-3.5-turbo"
-      messages: messages,
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content: `You are a real estate AI assistant. When given a short property description, return the following in JSON format:
+
+{
+  "listing": "...",
+  "caption": "...",
+  "subject": "..."
+}`,
+        },
+        ...messages,
+      ],
     });
 
     res.json(response.choices[0].message);
   } catch (err) {
     console.error("❌ OpenAI Error:", err.response?.status || err.code || err.message);
     console.error("🔎 Full Error:", JSON.stringify(err, null, 2));
-  
+
     res.status(500).json({
       error: {
         message: err.response?.data?.error?.message || err.message || "Something went wrong.",
       },
     });
   }
-  
+});
+
+// ✅ Final brace was missing
 app.listen(port, () => {
   console.log(`🚀 AgentFlow backend running on port ${port}`);
 });
